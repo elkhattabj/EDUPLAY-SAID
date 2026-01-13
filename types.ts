@@ -16,6 +16,8 @@ export interface Project {
   location: string;
   image: string;
   category: string;
+  gallery: string[];
+  description?: string;
 }
 
 export interface Client {

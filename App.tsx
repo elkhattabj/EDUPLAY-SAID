@@ -8,48 +8,47 @@ import AIConsultant from './components/AIConsultant';
 import VideoSection from './components/VideoSection';
 import CategoryDetailPage from './components/CategoryDetailPage';
 import ProjectsPage from './components/ProjectsPage';
+import ProjectDetailPage from './components/ProjectDetailPage';
 import AboutPage from './components/AboutPage';
 import StatsPage from './components/StatsPage';
 import { CATEGORIES, PROJECTS, CLIENTS, STATISTICS } from './constants';
 import { 
   MapPin, 
   ArrowRight, 
-  Play, 
-  CheckCircle2, 
   Phone, 
   Mail, 
   Facebook, 
   Linkedin, 
   Instagram, 
-  Twitter,
-  ExternalLink
+  ExternalLink,
+  ShieldCheck,
+  CheckCircle2,
+  Camera
 } from 'lucide-react';
 
-type ViewState = 'home' | 'category' | 'projects' | 'about' | 'stats';
+type ViewState = 'home' | 'category' | 'projects' | 'project-detail' | 'about' | 'stats';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<ViewState>('home');
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
 
-  // SVG Patterns for toy-themed backgrounds
-  const toyPatternLight = `url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd' opacity='0.08'%3E%3Cpath d='M10 10h15v15H10z' stroke='%23ea580c' stroke-width='1'/%3E%3Ccircle cx='50' cy='20' r='8' stroke='%233b82f6' stroke-width='1'/%3E%3Cpath d='M80 15l10 5-5 10-10-5z' stroke='%23ea580c' stroke-width='1'/%3E%3Crect x='20' y='50' width='20' height='10' rx='2' stroke='%233b82f6' stroke-width='1'/%3E%3Ccircle cx='25' cy='65' r='3' fill='%233b82f6'/%3E%3Ccircle cx='35' cy='65' r='3' fill='%233b82f6'/%3E%3Cpath d='M70 60c0 5.523 4.477 10 10 10s10-4.477 10-10-4.477-10-10-10-10 4.477-10 10z' stroke='%23ea580c' stroke-width='1'/%3E%3Cpath d='M100 20v15h15' stroke='%233b82f6' stroke-width='1'/%3E%3Cpath d='M10 90l10-10 10 10-10 10z' stroke='%23ea580c' stroke-width='1'/%3E%3Crect x='50' y='90' width='12' height='12' rx='2' stroke='%233b82f6' stroke-width='1'/%3E%3Cpath d='M85 95h20' stroke='%23ea580c' stroke-width='1'/%3E%3C/g%3E%3C/svg%3E")`;
-  const toyPatternDark = `url("data:image/svg+xml,%3Csvg width='150' height='150' viewBox='0 0 150 150' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd' opacity='0.04'%3E%3Crect x='20' y='20' width='20' height='20' stroke='white' stroke-width='1.5'/%3E%3Ccircle cx='75' cy='30' r='12' stroke='white' stroke-width='1.5'/%3E%3Cpath d='M110 40l15 10-10 15-15-10z' stroke='white' stroke-width='1.5'/%3E%3Cpath d='M30 80h30v10H30z' stroke='white' stroke-width='1.5'/%3E%3Ccircle cx='35' cy='100' r='4' fill='white'/%3E%3Ccircle cx='55' cy='100' r='4' fill='white'/%3E%3Cpath d='M100 90c5 0 10 5 10 10s-5 10-10 10-10-5-10-10 5-10 10-10z' stroke='white' stroke-width='1.5'/%3E%3Cpath d='M10 120l15 15L10 150' stroke='white' stroke-width='1.5'/%3E%3Crect x='70' y='125' width='15' height='15' stroke='white' stroke-width='1.5'/%3E%3C/g%3E%3C/svg%3E")`;
-
-  const navigateTo = (view: ViewState, categoryId: string | null = null) => {
+  const navigateTo = (view: ViewState, id: string | null = null) => {
     setCurrentView(view);
-    setSelectedCategoryId(categoryId);
+    if (view === 'category') setSelectedCategoryId(id);
+    if (view === 'project-detail') setSelectedProjectId(id);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleBackToHome = () => navigateTo('home');
+  const handleBackToProjects = () => navigateTo('projects');
 
   const selectedCategory = CATEGORIES.find(c => c.id === selectedCategoryId);
+  const selectedProject = PROJECTS.find(p => p.id === selectedProjectId);
 
   return (
-    <div className="min-h-screen bg-slate-50 selection:bg-orange-200 selection:text-orange-900 overflow-x-hidden">
-      {/* Global Background Pattern Decoration */}
-      <div className="fixed inset-0 opacity-[0.03] pointer-events-none z-0" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 86c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm66 3c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm-46-45c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm54 .241c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ea580c' fill-opacity='1' fill-rule='evenodd'/%3E%3C/svg%3E")` }}></div>
-
+    <div className="min-h-screen bg-white selection:bg-ciec-green selection:text-white font-body">
+      {/* Fixed Header */}
       <Header 
         onLogoClick={handleBackToHome} 
         onAboutClick={() => navigateTo('about')}
@@ -64,56 +63,72 @@ const App: React.FC = () => {
         <>
           <Hero onDiscoverClick={() => document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' })} />
 
-          {/* Statistics Section - Nos chiffres clés */}
-          <section className="relative py-20 -mt-16 z-20">
-            <div className="container mx-auto px-4">
-              <div className="bg-white rounded-[40px] shadow-2xl p-8 md:p-12 grid grid-cols-2 lg:grid-cols-4 gap-8 border border-orange-50">
+          {/* Stats Section in Professional Style */}
+          <section className="relative py-32 -mt-24 z-20">
+            <div className="container mx-auto px-4 lg:px-8">
+              <div className="bg-white rounded-[40px] shadow-[0_40px_100px_-20px_rgba(0,141,65,0.12)] p-12 lg:p-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 border border-slate-50 relative overflow-hidden group">
+                <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-ciec-green via-ciec-pistachio via-ciec-yellow to-ciec-orange" />
                 {STATISTICS.map((stat, i) => (
-                  <button key={i} onClick={() => navigateTo('stats')} className="flex flex-col items-center text-center p-4 group">
-                    <div className={`p-4 rounded-3xl bg-slate-50 ${stat.color} mb-6 transform transition-transform group-hover:scale-110 group-hover:rotate-6`}>
-                      <stat.icon size={32} strokeWidth={2.5} />
+                  <div key={i} className="flex flex-col items-center text-center group/stat cursor-default">
+                    <div className={`p-6 rounded-[28px] bg-[#F4F8F6] ${stat.color} mb-8 transition-all duration-700 group-hover/stat:scale-110 group-hover/stat:shadow-2xl group-hover/stat:bg-white`}>
+                      <stat.icon size={44} strokeWidth={1.5} />
                     </div>
-                    <div className="text-4xl md:text-5xl font-bold font-fredoka text-slate-900 mb-2">{stat.value}</div>
-                    <div className="text-slate-500 font-medium">{stat.label}</div>
-                  </button>
+                    <div className="text-5xl lg:text-6xl font-black font-heading text-slate-900 mb-4 tracking-tighter">{stat.value}</div>
+                    <div className="text-slate-400 font-bold uppercase tracking-[0.25em] text-[10px]">{stat.label}</div>
+                  </div>
                 ))}
               </div>
             </div>
           </section>
 
-          {/* Products Grid */}
-          <section id="products" className="py-24 container mx-auto px-4 relative">
+          {/* Core Expertise Sections */}
+          <section id="products" className="py-40 container mx-auto px-4 lg:px-8 relative">
             <SectionHeading 
-              title="Nos Domaines d'Expertise" 
-              subtitle="Ce que nous faisons" 
+              title="Aménagements Urbains & Ludiques" 
+              subtitle="Domaines d'Intervention" 
               center 
             />
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16">
               {CATEGORIES.map(cat => (
                 <CategoryCard key={cat.id} category={cat} onSelect={(id) => navigateTo('category', id)} />
               ))}
             </div>
           </section>
 
-          {/* About Section Snippet */}
-          <section id="about" className="py-24 bg-slate-900 text-white overflow-hidden relative">
-            <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: toyPatternDark, backgroundSize: '300px' }}></div>
-            <div className="absolute top-0 right-0 w-1/2 h-full bg-orange-600/5 skew-x-12 translate-x-1/2 pointer-events-none" />
-            <div className="container mx-auto px-4 relative z-10">
-              <div className="flex flex-col lg:flex-row gap-16 items-center">
+          {/* Corporate About Section */}
+          <section id="about" className="py-48 bg-slate-900 text-white overflow-hidden relative">
+            <div className="absolute top-0 right-0 w-1/3 h-full bg-ciec-green/10 -skew-x-12 translate-x-1/2 pointer-events-none" />
+            <div className="container mx-auto px-4 lg:px-8 relative z-10">
+              <div className="flex flex-col lg:flex-row gap-32 items-center">
                 <div className="lg:w-1/2">
-                  <span className="text-orange-500 font-bold uppercase tracking-widest text-sm mb-4 block">À Propos d'EDUPLAY</span>
-                  <h2 className="text-4xl md:text-5xl font-bold font-fredoka mb-8 leading-tight">
-                    Leader de l'aménagement ludique et sportif au Maroc
+                  <div className="inline-flex items-center gap-4 mb-10 glass px-8 py-3 rounded-full border border-white/10">
+                    <ShieldCheck className="text-ciec-pistachio" size={24} />
+                    <span className="text-ciec-pistachio font-black uppercase tracking-[0.3em] text-[10px]">Leader de l'Aménagement au Maroc</span>
+                  </div>
+                  <h2 className="text-6xl md:text-8xl font-black font-heading mb-12 leading-[0.95] tracking-tighter uppercase">
+                    Engagé pour la <span className="text-ciec-green">Qualité</span> durable
                   </h2>
-                  <p className="text-slate-400 text-lg mb-8 leading-relaxed">
-                    Depuis plus de 12 ans, EDUPLAY conçoit des espaces qui inspirent le mouvement et la joie. Nous accompagnons les communes, les écoles et les promoteurs immobiliers dans la création d'environnements extérieurs d'exception.
+                  <p className="text-slate-400 text-2xl mb-16 leading-relaxed font-light">
+                    Depuis 15 ans, EDUPLAY accompagne les collectivités et acteurs privés dans la création d'espaces de vie exceptionnels. Notre savoir-faire allie sécurité rigoureuse et design architectural de pointe.
                   </p>
-                  <button onClick={() => navigateTo('about')} className="bg-orange-600 hover:bg-orange-700 text-white px-10 py-4 rounded-full font-bold transition-all inline-flex items-center group shadow-lg shadow-orange-600/20">
-                    En savoir plus <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
+                  
+                  <div className="grid grid-cols-2 gap-12 mb-20 border-l border-white/10 pl-10">
+                    <div>
+                      <h4 className="text-ciec-pistachio font-black text-xs uppercase tracking-widest mb-4">Sécurité & Normes</h4>
+                      <p className="text-sm text-slate-500 leading-relaxed font-medium">Validation HIC, Normes EN-1176 / 1177 pour une tranquillité absolue.</p>
+                    </div>
+                    <div>
+                      <h4 className="text-ciec-orange font-black text-xs uppercase tracking-widest mb-4">Design sur mesure</h4>
+                      <p className="text-sm text-slate-500 leading-relaxed font-medium">Adaptation architecturale et paysagère de chaque projet.</p>
+                    </div>
+                  </div>
+
+                  <button onClick={() => navigateTo('about')} className="bg-ciec-green hover:bg-ciec-green/90 text-white px-16 py-6 rounded-2xl font-bold text-lg transition-all inline-flex items-center group shadow-2xl btn-shadow active:scale-95">
+                    Notre Savoir-faire <ArrowRight className="ml-4 group-hover:translate-x-3 transition-transform" />
                   </button>
                 </div>
-                <div className="lg:w-1/2 w-full">
+                <div className="lg:w-1/2 w-full relative">
+                  <div className="absolute -inset-10 bg-ciec-green/20 rounded-full blur-[150px] animate-pulse" />
                   <AIConsultant />
                 </div>
               </div>
@@ -122,29 +137,37 @@ const App: React.FC = () => {
 
           <VideoSection />
 
-          {/* Realizations Snippet */}
-          <section id="projects" className="py-24 bg-slate-50 relative overflow-hidden">
-            <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: toyPatternLight, backgroundSize: '240px' }}></div>
-            <div className="container mx-auto px-4 relative z-10">
-              <div className="flex flex-col md:flex-row justify-between items-end mb-16">
-                <SectionHeading title="Nos Réalisations Récentes" subtitle="Portfolio" />
-                <button onClick={() => navigateTo('projects')} className="hidden md:flex items-center gap-2 mb-8 border-2 border-orange-600 text-orange-600 hover:bg-orange-600 hover:text-white px-8 py-2 rounded-full font-bold transition-all group">
-                  Voir tout le portfolio <ExternalLink size={16} className="ml-1" />
+          {/* Portfolio Section */}
+          <section id="projects" className="py-48 bg-[#FDFDFD] relative overflow-hidden">
+            <div className="container mx-auto px-4 lg:px-8 relative z-10">
+              <div className="flex flex-col md:flex-row justify-between items-end mb-28">
+                <SectionHeading title="Impact et Réalisations" subtitle="Portfolio" />
+                <button onClick={() => navigateTo('projects')} className="hidden md:flex items-center gap-5 mb-10 bg-slate-900 text-white px-12 py-5 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] transition-all hover:bg-ciec-green shadow-2xl active:scale-95">
+                  Voir Tout le Portfolio <ExternalLink size={20} />
                 </button>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {PROJECTS.slice(0, 3).map(project => (
-                  <div key={project.id} className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all border border-slate-100">
-                    <div className="relative h-64 overflow-hidden">
-                      <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                      <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-1 rounded-full text-xs font-bold text-slate-800 uppercase tracking-wider">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
+                {PROJECTS.slice(0, 6).map(project => (
+                  <div 
+                    key={project.id} 
+                    onClick={() => navigateTo('project-detail', project.id)}
+                    className="group bg-white rounded-[32px] overflow-hidden shadow-[0_10px_30px_-15px_rgba(0,0,0,0.05)] hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.12)] transition-all duration-700 border border-slate-100 cursor-pointer"
+                  >
+                    <div className="relative h-96 overflow-hidden">
+                      <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
+                      <div className="absolute top-8 left-8 glass px-6 py-2.5 rounded-xl text-[10px] font-black text-slate-900 uppercase tracking-widest shadow-xl">
                         {project.category}
                       </div>
+                      <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <div className="bg-ciec-green text-white p-5 rounded-full shadow-2xl transform translate-y-8 group-hover:translate-y-0 transition-all duration-500">
+                          <Camera size={32} />
+                        </div>
+                      </div>
                     </div>
-                    <div className="p-6">
-                      <h4 className="text-xl font-bold mb-2 group-hover:text-orange-600 transition-colors">{project.title}</h4>
-                      <p className="flex items-center text-slate-500 text-sm">
-                        <MapPin size={16} className="mr-1 text-orange-500" /> {project.location}
+                    <div className="p-12">
+                      <h4 className="text-3xl font-bold font-heading mb-4 group-hover:text-ciec-green transition-colors tracking-tight uppercase">{project.title}</h4>
+                      <p className="flex items-center text-slate-500 text-sm font-semibold">
+                        <MapPin size={18} className="mr-3 text-ciec-pistachio" /> {project.location}
                       </p>
                     </div>
                   </div>
@@ -153,14 +176,17 @@ const App: React.FC = () => {
             </div>
           </section>
 
-          {/* Clients Snippet */}
-          <section id="clients" className="py-24 bg-white">
-            <div className="container mx-auto px-4">
-              <h3 className="text-center text-slate-400 font-bold uppercase tracking-widest text-sm mb-16">Ils nous font confiance</h3>
-              <div className="flex flex-wrap justify-center items-center gap-12 lg:gap-24 opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
+          {/* Major Clients Section */}
+          <section id="clients" className="py-40 bg-white">
+            <div className="container mx-auto px-4 lg:px-8">
+              <div className="text-center mb-28">
+                <p className="text-slate-400 font-bold uppercase tracking-[0.5em] text-[10px] mb-8">Partenaires Institutionnels</p>
+                <div className="h-1 w-24 bg-ciec-pistachio mx-auto rounded-full" />
+              </div>
+              <div className="flex flex-wrap justify-center items-center gap-24 lg:gap-48 opacity-25 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-1000 ease-in-out">
                 {CLIENTS.map(client => (
-                  <div key={client.id} className="h-16 flex items-center justify-center p-2 rounded-xl">
-                    <img src={client.logo} alt={client.name} className="max-h-full max-w-[150px] object-contain" />
+                  <div key={client.id} className="h-24 flex items-center justify-center transform hover:scale-110 transition-transform">
+                    <img src={client.logo} alt={client.name} className="max-h-full max-w-[220px] object-contain" />
                   </div>
                 ))}
               </div>
@@ -174,7 +200,11 @@ const App: React.FC = () => {
       )}
 
       {currentView === 'projects' && (
-        <ProjectsPage onBack={handleBackToHome} />
+        <ProjectsPage onBack={handleBackToHome} onProjectSelect={(id) => navigateTo('project-detail', id)} />
+      )}
+
+      {currentView === 'project-detail' && selectedProject && (
+        <ProjectDetailPage project={selectedProject} onBack={handleBackToProjects} />
       )}
 
       {currentView === 'about' && (
@@ -185,55 +215,72 @@ const App: React.FC = () => {
         <StatsPage onBack={handleBackToHome} />
       )}
 
-      {/* Footer */}
-      <footer id="contact" className="bg-slate-950 text-white pt-24 pb-12 relative overflow-hidden">
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
-            <div className="space-y-8">
-              <button onClick={handleBackToHome} className="text-3xl font-bold font-fredoka text-left">EDU<span className="text-orange-500">PLAY</span></button>
-              <p className="text-slate-400 leading-relaxed">Votre partenaire de confiance pour des espaces publics et privés vivants, sécurisés et inspirants au Maroc.</p>
-              <div className="flex space-x-4">
-                {[Facebook, Instagram, Linkedin, Twitter].map((Social, idx) => (
-                  <a key={idx} href="#" className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center hover:bg-orange-600 transition-all text-slate-400 hover:text-white"><Social size={20} /></a>
+      {/* Corporate Footer */}
+      <footer id="contact" className="bg-[#0B0D0E] text-white pt-40 pb-16 relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-ciec-green via-ciec-pistachio to-ciec-orange" />
+        <div className="container mx-auto px-4 lg:px-8 relative z-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-24 mb-32">
+            <div className="space-y-16">
+              <button onClick={handleBackToHome} className="text-5xl font-black font-heading text-left tracking-tighter group">
+                EDU<span className="text-ciec-green group-hover:text-ciec-pistachio transition-colors">PLAY</span>
+              </button>
+              <p className="text-slate-500 leading-relaxed text-xl font-light">Le partenaire de référence pour l'aménagement technique et paysager au Maroc. Innovation, Design & Sécurité.</p>
+              <div className="flex space-x-8">
+                {[Facebook, Instagram, Linkedin].map((Social, idx) => (
+                  <a key={idx} href="#" className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center hover:bg-ciec-green transition-all text-slate-500 hover:text-white border border-white/5 shadow-2xl"><Social size={24} /></a>
                 ))}
               </div>
             </div>
             
             <div>
-              <h4 className="text-xl font-bold mb-8 font-fredoka">Nos Services</h4>
-              <ul className="space-y-4 text-slate-400">
+              <h4 className="text-xs font-black mb-12 text-white tracking-[0.4em] uppercase">Services</h4>
+              <ul className="space-y-8">
                 {CATEGORIES.map(cat => (
-                  <li key={cat.id}><button onClick={() => navigateTo('category', cat.id)} className="hover:text-orange-500 transition-colors text-left">{cat.title}</button></li>
+                  <li key={cat.id}><button onClick={() => navigateTo('category', cat.id)} className="text-slate-500 hover:text-ciec-pistachio transition-colors text-left text-sm font-semibold tracking-wide">{cat.title}</button></li>
                 ))}
               </ul>
             </div>
 
             <div>
-              <h4 className="text-xl font-bold mb-8 font-fredoka">Navigation</h4>
-              <ul className="space-y-4 text-slate-400">
-                <li><button onClick={handleBackToHome} className="hover:text-orange-500 transition-colors">Accueil</button></li>
-                <li><button onClick={() => navigateTo('about')} className="hover:text-orange-500 transition-colors">À Propos</button></li>
-                <li><button onClick={() => navigateTo('projects')} className="hover:text-orange-500 transition-colors">Réalisations</button></li>
-                <li><button onClick={() => navigateTo('stats')} className="hover:text-orange-500 transition-colors">Performance</button></li>
+              <h4 className="text-xs font-black mb-12 text-white tracking-[0.4em] uppercase">Entreprise</h4>
+              <ul className="space-y-8">
+                <li><button onClick={handleBackToHome} className="text-slate-500 hover:text-ciec-pistachio transition-colors text-sm font-semibold tracking-wide">Accueil</button></li>
+                <li><button onClick={() => navigateTo('about')} className="text-slate-500 hover:text-ciec-pistachio transition-colors text-sm font-semibold tracking-wide">Notre Expertise</button></li>
+                <li><button onClick={() => navigateTo('projects')} className="text-slate-500 hover:text-ciec-pistachio transition-colors text-sm font-semibold tracking-wide">Portfolio</button></li>
+                <li><button onClick={() => navigateTo('stats')} className="text-slate-500 hover:text-ciec-pistachio transition-colors text-sm font-semibold tracking-wide">Indices de Performance</button></li>
               </ul>
             </div>
 
-            <div className="bg-white/5 p-8 rounded-3xl border border-white/10">
-              <h4 className="text-xl font-bold mb-8 font-fredoka tracking-tight">Contact Direct</h4>
-              <ul className="space-y-6 text-slate-400">
-                <li className="flex items-start gap-4">
-                  <MapPin className="text-orange-500 mt-1" size={18} />
-                  <span className="text-sm">Casablanca Finance City, Casablanca, Maroc</span>
+            <div className="space-y-12">
+              <h4 className="text-xs font-black mb-12 text-white tracking-[0.4em] uppercase">Contact</h4>
+              <ul className="space-y-10">
+                <li className="flex items-start gap-8">
+                  <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center shrink-0 border border-white/5">
+                    <MapPin className="text-ciec-orange" size={24} />
+                  </div>
+                  <span className="text-slate-400 text-sm leading-relaxed font-light mt-1">Casablanca Finance City, Tour Emergence, Casablanca, Maroc</span>
                 </li>
-                <li className="flex items-center gap-4">
-                  <Phone className="text-orange-500" size={18} />
-                  <a href="tel:+212522000000" className="text-sm">+212 522 00 00 00</a>
+                <li className="flex items-center gap-8">
+                   <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center shrink-0 border border-white/5">
+                    <Mail className="text-ciec-green" size={24} />
+                  </div>
+                  <a href="mailto:contact@eduplay.ma" className="text-slate-400 hover:text-white transition-colors text-sm font-medium tracking-wide">contact@eduplay.ma</a>
+                </li>
+                <li className="flex items-center gap-8">
+                   <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center shrink-0 border border-white/5">
+                    <Phone className="text-ciec-pistachio" size={24} />
+                  </div>
+                  <a href="tel:+212522000000" className="text-slate-400 hover:text-white transition-colors text-sm font-medium tracking-wide">+212 522 00 00 00</a>
                 </li>
               </ul>
             </div>
           </div>
-          <div className="pt-12 border-t border-white/5 text-center text-slate-600 text-sm">
-            <p>&copy; {new Date().getFullYear()} EDUPLAY. Tous droits réservés.</p>
+          <div className="pt-20 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-10 text-slate-600 text-[9px] font-black uppercase tracking-[0.4em]">
+            <p>&copy; {new Date().getFullYear()} EDUPLAY INTERNATIONAL GROUP S.A.</p>
+            <div className="flex gap-16">
+              <a href="#" className="hover:text-white transition-colors">Politique Qualité</a>
+              <a href="#" className="hover:text-white transition-colors">Conditions Générales</a>
+            </div>
           </div>
         </div>
       </footer>

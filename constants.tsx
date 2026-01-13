@@ -2,7 +2,6 @@
 import React from 'react';
 import { Category, Project, Client, VideoItem } from './types';
 import { 
-  Dribbble, 
   Gamepad2, 
   Dumbbell, 
   Layers, 
@@ -12,79 +11,151 @@ import {
   Users,
   CheckCircle,
   Map,
-  Smile
+  Smile,
+  Activity,
+  Award
 } from 'lucide-react';
 
-export const CATEGORIES: Category[] = [
+export interface ExtendedCategory extends Category {
+  color: string;
+  bgColor: string;
+  accent: string;
+}
+
+const generateGallery = (category: string) => {
+  const images = {
+    'Aire de jeux': [
+      'https://images.unsplash.com/photo-1541781774459-bb2af2f05b55',
+      'https://images.unsplash.com/photo-1574629810360-7efbbe195018',
+      'https://images.unsplash.com/photo-1596464716127-f2a82984de30',
+      'https://images.unsplash.com/photo-1588072432836-e10032774350',
+      'https://images.unsplash.com/photo-1588072432904-843af07f01ec',
+      'https://images.unsplash.com/photo-1596464716151-5471d4715f33',
+      'https://images.unsplash.com/photo-1603126727210-948f2197607a',
+      'https://images.unsplash.com/photo-1601058268499-e52658b8bb88',
+      'https://images.unsplash.com/photo-1472162072942-cd5147eb3902',
+      'https://images.unsplash.com/photo-1566367576585-051277d52997'
+    ],
+    'Terrain de sport': [
+      'https://images.unsplash.com/photo-1511225070737-5af5ac9a690d',
+      'https://images.unsplash.com/photo-1534438327276-14e5300c3a48',
+      'https://images.unsplash.com/photo-1526676037777-05a232554f77',
+      'https://images.unsplash.com/photo-1544919982-b61976f0ba43',
+      'https://images.unsplash.com/photo-1504450758481-7338eba7524a',
+      'https://images.unsplash.com/photo-1543351611-58f69d7c1781',
+      'https://images.unsplash.com/photo-1551958219-acbc608c6377',
+      'https://images.unsplash.com/photo-1574629810360-7efbbe195018',
+      'https://images.unsplash.com/photo-1461896836934-ffe607ba8211',
+      'https://images.unsplash.com/photo-1546519638-68e109498ffc'
+    ],
+    'Mobilier urbain': [
+      'https://images.unsplash.com/photo-1520624844391-2cba2839d891',
+      'https://images.unsplash.com/photo-1496307653780-42ee777d4833',
+      'https://images.unsplash.com/photo-1517457373958-b7bdd4587205',
+      'https://images.unsplash.com/photo-1495562569060-2eec283d3391',
+      'https://images.unsplash.com/photo-1484154218962-a197022b5858',
+      'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05',
+      'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b',
+      'https://images.unsplash.com/photo-1444464666168-49d633b867ad',
+      'https://images.unsplash.com/photo-1433086177654-c9545b41d446',
+      'https://images.unsplash.com/photo-1501785888041-af3ef285b470'
+    ]
+  };
+  return (images[category as keyof typeof images] || images['Aire de jeux']).map(url => `${url}?q=80&w=1000&auto=format&fit=crop`);
+};
+
+export const CATEGORIES: ExtendedCategory[] = [
   {
     id: 'playground',
     title: 'Aire de jeux',
-    description: 'Des espaces ludiques sécurisés pour l\'épanouissement des enfants.',
+    description: 'Espaces ludiques certifiés alliant sécurité, pédagogie et créativité.',
     image: 'https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?q=80&w=1000&auto=format&fit=crop',
     icon: 'Gamepad2',
-    fullDescription: 'Nous concevons des aires de jeux qui stimulent l\'imagination et favorisent le développement physique et social des enfants de tous âges. Nos structures sont fabriquées avec des matériaux de haute qualité, résistants aux intempéries et conformes aux normes de sécurité les plus strictes.',
-    features: ['Structures multi-activités', 'Toboggans et balançoires', 'Jeux à ressort', 'Parcours d\'équilibre'],
-    benefits: ['Sécurité maximale (norme EN1176)', 'Design ergonomique et coloré', 'Haute résistance aux UV', 'Maintenance simplifiée']
+    color: 'text-ciec-green',
+    bgColor: 'bg-[#E6F3EC]',
+    accent: '#008D41',
+    fullDescription: 'Conception d\'aires de jeux conformes aux normes EN1176. Nous créons des univers sécurisés qui favorisent l\'épanouissement physique et social des enfants.',
+    features: ['Structures multi-activités', 'Parcours d\'aventure', 'Jeux inclusifs (PMR)', 'Aménagements thématiques'],
+    benefits: ['Sécurité certifiée', 'Matériaux haute résistance', 'Design sur-mesure', 'Installation professionnelle']
   },
   {
     id: 'fitness',
-    title: 'Sport & Fitness Plein Air',
-    description: 'Équipements de fitness extérieurs robustes pour tous les âges.',
+    title: 'Équipement de sport fitness',
+    description: 'Stations de fitness en plein air pour promouvoir le bien-être urbain.',
     image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=1000&auto=format&fit=crop',
-    icon: 'Dumbbell',
-    fullDescription: 'Le fitness en plein air est une solution idéale pour encourager une vie saine dans les espaces publics. Nos équipements sont conçus pour offrir une expérience d\'entraînement complète, sollicitant tous les groupes musculaires tout en étant accessibles à tous.',
-    features: ['Stations de musculation guidée', 'Appareils cardio (vélos, elliptiques)', 'Zones de Street Workout', 'Équipements seniors'],
-    benefits: ['Accès libre au sport', 'Résistance au vandalisme', 'Adapté à tous les niveaux', 'Installation sur tous types de sols']
+    icon: 'Activity',
+    color: 'text-ciec-pistachio',
+    bgColor: 'bg-[#F2F8E9]',
+    accent: '#8CC63F',
+    fullDescription: 'Solutions de fitness outdoor durables et ergonomiques. Nos équipements permettent une pratique sportive accessible à tous les niveaux de performance.',
+    features: ['Stations de musculation', 'Appareils cardio extérieurs', 'Zones Street Workout', 'Circuits santé seniors'],
+    benefits: ['Résistance aux intempéries', 'Ergonomie certifiée', 'Maintenance simplifiée', 'Usage intensif']
   },
   {
     id: 'flooring',
     title: 'Revêtement de sol',
-    description: 'Sols amortissants et techniques pour sécurité et performance.',
+    description: 'Sols amortissants techniques pour une sécurité maximale en zone de jeux.',
     image: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1000&auto=format&fit=crop',
     icon: 'Layers',
-    fullDescription: 'La sécurité d\'une aire de jeux commence par le sol. Nous proposons une large gamme de revêtements amortissants (EPDM, gazon synthétique, dalles) qui protègent les enfants en cas de chute et apportent une touche esthétique unique à vos projets.',
-    features: ['Sol coulé en EPDM', 'Dalles amortissantes', 'Gazon synthétique de sport', 'Peintures techniques'],
-    benefits: ['Absorption des chocs certifiée', 'Drainage optimal des eaux', 'Personnalisation infinie (couleurs/motifs)', 'Durabilité exceptionnelle']
+    color: 'text-ciec-orange',
+    bgColor: 'bg-[#FFF4E8]',
+    accent: '#F7941E',
+    fullDescription: 'Expertise en sols amortissants (EPDM, dalles, gazon synthétique). Nos revêtements garantissent une absorption des chocs conforme aux normes HIC.',
+    features: ['Sol coulé EPDM', 'Dalles amortissantes', 'Gazon synthétique de sport', 'Peintures techniques'],
+    benefits: ['Antidérapant', 'Drainage optimal', 'Designs personnalisables', 'Durabilité certifiée']
   },
   {
     id: 'urban',
     title: 'Mobilier urbain',
-    description: 'Bancs, corbeilles et abris pour embellir vos espaces publics.',
+    description: 'Design et fonctionnalité pour l\'aménagement des espaces publics.',
     image: 'https://images.unsplash.com/photo-1520624844391-2cba2839d891?q=80&w=1000&auto=format&fit=crop',
     icon: 'Trees',
-    fullDescription: 'Notre mobilier urbain allie esthétique moderne et fonctionnalité. Nous transformons les espaces publics en lieux de rencontre conviviaux grâce à des produits durables qui s\'intègrent harmonieusement dans l\'architecture urbaine marocaine.',
-    features: ['Bancs et banquettes ergonomiques', 'Corbeilles et tri sélectif', 'Abris bus et pergolas', 'Potelets et barrières'],
-    benefits: ['Traitement anti-corrosion', 'Design contemporain', 'Confort d\'utilisation', 'Respect de l\'environnement']
+    color: 'text-ciec-green',
+    bgColor: 'bg-[#E6F3EC]',
+    accent: '#008D41',
+    fullDescription: 'Sélection rigoureuse de mobilier urbain architectural. Nous transformons les espaces de passage en lieux de rencontre conviviaux et esthétiques.',
+    features: ['Bancs et assises contemporaines', 'Corbeilles et tri sélectif', 'Abris bus et pergolas', 'Potelets de protection'],
+    benefits: ['Esthétique premium', 'Traitement anti-corrosion', 'Confort d\'assise', 'Intégration paysagère']
   },
   {
     id: 'educational',
     title: 'Matériel éducatif',
-    description: 'Outils pédagogiques innovants pour écoles et crèches.',
+    description: 'Supports pédagogiques pour écoles, crèches et centres d\'apprentissage.',
     image: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=1000&auto=format&fit=crop',
     icon: 'GraduationCap',
-    fullDescription: 'EDUPLAY accompagne le monde de l\'éducation avec des solutions d\'aménagement qui favorisent l\'apprentissage par le jeu. Notre matériel éducatif est conçu pour stimuler la créativité, la motricité fine et la collaboration entre élèves.',
-    features: ['Mobilier de classe flexible', 'Jeux muraux interactifs', 'Équipements psychomoteurs', 'Coins lecture et repos'],
-    benefits: ['Qualité pédagogique', 'Ergonomie adaptée à l\'âge', 'Matériaux non-toxiques', 'Facilité de rangement']
+    color: 'text-ciec-yellow',
+    bgColor: 'bg-[#FFFBE6]',
+    accent: '#FFD200',
+    fullDescription: 'Aménagement d\'espaces d\'apprentissage stimulants. Notre matériel favorise la créativité et la motricité fine dans un cadre sécurisé.',
+    features: ['Mobilier de classe flexible', 'Jeux muraux interactifs', 'Parcours de motricité', 'Rangement pédagogique'],
+    benefits: ['Ergonomie adaptée', 'Couleurs stimulantes', 'Facile à nettoyer', 'Matériaux non-toxiques']
   },
   {
     id: 'sports_court',
     title: 'Terrain de sport',
-    description: 'Conception et réalisation de terrains multisports (City Stades).',
+    description: 'Réalisation de city-stades et plateaux sportifs multisports.',
     image: 'https://images.unsplash.com/photo-1511225070737-5af5ac9a690d?q=80&w=1000&auto=format&fit=crop',
     icon: 'Trophy',
-    fullDescription: 'Nous réalisons des terrains multisports (City Stades) clés en main, permettant la pratique du football, basketball, handball et volleyball sur un même espace. Nos terrains sont conçus pour résister à une utilisation intensive.',
-    features: ['Clôtures rigides et pare-ballons', 'Buts multisports intégrés', 'Gazon synthétique ou sol résine', 'Éclairage LED basse consommation'],
-    benefits: ['Optimisation de l\'espace', 'Polyvalence des activités', 'Réduction des nuisances sonores', 'Homologation fédérale possible']
+    color: 'text-ciec-pistachio',
+    bgColor: 'bg-[#F2F8E9]',
+    accent: '#8CC63F',
+    fullDescription: 'Conception et installation de terrains multisports clés en main. Nous optimisons l\'espace pour permettre la pratique de plusieurs disciplines.',
+    features: ['Clôtures rigides renforcées', 'Gazon synthétique sport', 'Buts et paniers intégrés', 'Éclairage LED basse conso'],
+    benefits: ['Polyvalence d\'usage', 'Réduction du bruit', 'Cohésion sociale', 'Installation rapide']
   }
 ];
 
 export const PROJECTS: Project[] = [
-  { id: '1', title: 'Parc Central Kids', location: 'Casablanca', category: 'Aire de jeux', image: 'https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?q=80&w=800&auto=format&fit=crop' },
-  { id: '2', title: 'Collège Mohammed VI', location: 'Rabat', category: 'Terrain de sport', image: 'https://images.unsplash.com/photo-1511225070737-5af5ac9a690d?q=80&w=800&auto=format&fit=crop' },
-  { id: '3', title: 'Corniche Marina', location: 'Tanger', category: 'Mobilier urbain', image: 'https://images.unsplash.com/photo-1520624844391-2cba2839d891?q=80&w=800&auto=format&fit=crop' },
-  { id: '4', title: 'Espace Fitness Jarda', location: 'Marrakech', category: 'Fitness', image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=800&auto=format&fit=crop' },
-  { id: '5', title: 'Crèche Les P\'tits Loups', location: 'Agadir', category: 'Matériel éducatif', image: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=800&auto=format&fit=crop' },
-  { id: '6', title: 'Gymnase Omnisports', location: 'Fès', category: 'Revêtement de sol', image: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=800&auto=format&fit=crop' },
+  { id: '1', title: 'Parc Ghandi', location: 'Casablanca', category: 'Aire de jeux', image: 'https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?q=80&w=800&auto=format&fit=crop', gallery: generateGallery('Aire de jeux'), description: 'Réaménagement complet d\'un espace vert iconique de Casablanca.' },
+  { id: '2', title: 'Collège Mohammed VI', location: 'Rabat', category: 'Terrain de sport', image: 'https://images.unsplash.com/photo-1511225070737-5af5ac9a690d?q=80&w=800&auto=format&fit=crop', gallery: generateGallery('Terrain de sport'), description: 'Plateau sportif multisports haut de gamme pour milieu scolaire.' },
+  { id: '3', title: 'Corniche de Tanger', location: 'Tanger', category: 'Mobilier urbain', image: 'https://images.unsplash.com/photo-1520624844391-2cba2839d891?q=80&w=800&auto=format&fit=crop', gallery: generateGallery('Mobilier urbain'), description: 'Aménagement urbain d\'une zone littorale d\'exception.' },
+  { id: '4', title: 'Résidence Anfa Sky', location: 'Casablanca', category: 'Revêtement de sol', image: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=800&auto=format&fit=crop', gallery: generateGallery('Aire de jeux'), description: 'Sols amortissants haute performance pour résidence privée.' },
+  { id: '5', title: 'École Les Orangers', location: 'Agadir', category: 'Matériel éducatif', image: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=800&auto=format&fit=crop', gallery: generateGallery('Aire de jeux'), description: 'Espaces d\'apprentissage interactifs et ludiques.' },
+  { id: '6', title: 'Parc de la Ligue Arabe', location: 'Casablanca', category: 'Fitness', image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=800&auto=format&fit=crop', gallery: generateGallery('Terrain de sport'), description: 'Zone de fitness urbaine accessible à tous.' },
+  { id: '7', title: 'Marina de Rabat', location: 'Rabat', category: 'Mobilier urbain', image: 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=800&auto=format&fit=crop', gallery: generateGallery('Mobilier urbain'), description: 'Mobilier architectural pour zones portuaires de prestige.' },
+  { id: '8', title: 'Lycée Lyautey', location: 'Casablanca', category: 'Terrain de sport', image: 'https://images.unsplash.com/photo-1511225070737-5af5ac9a690d?q=80&w=800&auto=format&fit=crop', gallery: generateGallery('Terrain de sport'), description: 'Rénovation d\'infrastructures sportives académiques.' },
+  { id: '9', title: 'Parc Ibn Sina', location: 'Rabat', category: 'Aire de jeux', image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=800&auto=format&fit=crop', gallery: generateGallery('Aire de jeux'), description: 'Aire de jeux thématique centrale au coeur de Rabat.' },
+  { id: '10', title: 'Corniche d\'Agadir', location: 'Agadir', category: 'Mobilier urbain', image: 'https://images.unsplash.com/photo-1496307653780-42ee777d4833?q=80&w=800&auto=format&fit=crop', gallery: generateGallery('Mobilier urbain'), description: 'Équipements de confort pour promenade côtière touristique.' },
 ];
 
 export const CLIENTS: Client[] = [
@@ -112,12 +183,30 @@ export const VIDEOS: VideoItem[] = [
     title: 'Tests de résistance Fitness Plein Air', 
     videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-man-exercising-in-outdoor-gym-equipment-23429-large.mp4',
     thumbnail: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=400&auto=format&fit=crop'
+  },
+  { 
+    id: '4', 
+    title: 'Réalisation d\'un City Stade', 
+    videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-teens-playing-basketball-on-an-outdoor-court-34281-large.mp4',
+    thumbnail: 'https://images.unsplash.com/photo-1511225070737-5af5ac9a690d?q=80&w=400&auto=format&fit=crop'
+  },
+  { 
+    id: '5', 
+    title: 'Expertise Technique Revêtements Sols', 
+    videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-close-up-of-feet-running-on-a-track-22874-large.mp4',
+    thumbnail: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=400&auto=format&fit=crop'
+  },
+  { 
+    id: '6', 
+    title: 'Innovation Matériel Éducatif', 
+    videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-little-girl-playing-with-wooden-toys-at-home-34538-large.mp4',
+    thumbnail: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=400&auto=format&fit=crop'
   }
 ];
 
 export const STATISTICS = [
-  { label: 'Projets Réalisés', value: '500+', icon: CheckCircle, color: 'text-orange-600' },
-  { label: 'Clients Satisfaits', value: '250+', icon: Users, color: 'text-blue-600' },
-  { label: 'Années d\'Expérience', value: '12+', icon: Map, color: 'text-green-600' },
-  { label: 'Sourires d\'Enfants', value: '1M+', icon: Smile, color: 'text-pink-600' },
+  { label: 'Projets Réalisés', value: '1,500+', icon: CheckCircle, color: 'text-ciec-green' },
+  { label: 'Clients Corporate', value: '450+', icon: Users, color: 'text-ciec-orange' },
+  { label: 'Expertise Métier', value: '15 Ans', icon: Award, color: 'text-ciec-pistachio' },
+  { label: 'Surface Aménagée', value: '300k m²', icon: Map, color: 'text-ciec-yellow' },
 ];
