@@ -1,0 +1,8 @@
+{
+  "name": "EDUPLAY - Solutions d'Aménagement Ludique",
+  "description": "Plateforme spécialisée dans l'aménagement d'aires de jeux, équipements sportifs, mobilier urbain et matériel éducatif.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
